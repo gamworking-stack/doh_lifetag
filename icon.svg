@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DOH LIFE TAG">
+  <rect width="512" height="512" rx="112" fill="#072A52"/>
+  <path d="M256 86c-67 0-122 54-122 121 0 83 122 219 122 219s122-136 122-219c0-67-55-121-122-121z" fill="#F4B400"/>
+  <circle cx="256" cy="207" r="54" fill="#FFFFFF"/>
+  <path d="M256 158v98M207 207h98" stroke="#072A52" stroke-width="34" stroke-linecap="round"/>
+  <path d="M154 390h204" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round"/>
+</svg>

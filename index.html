@@ -1,0 +1,1670 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#072A52">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>DOH LIFE TAG Emergency Report</title>
+  <style>
+    :root {
+      --navy: #072A52;
+      --navy-2: #0B3A6B;
+      --gold: #F4B400;
+      --gold-dark: #E0A800;
+      --blue: #2F80ED;
+      --green: #27AE60;
+      --red: #EB5757;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #D8DEE8;
+      --soft: #F7F8FA;
+      --white: #FFFFFF;
+      --shadow: 0 12px 30px rgba(7, 42, 82, .10);
+      --radius-card: 22px;
+      --radius-button: 18px;
+      font-family: "Noto Sans Thai", "Prompt", "Th Sarabun New", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(47, 128, 237, .10), transparent 34rem),
+        linear-gradient(180deg, #F2F6FB 0%, var(--soft) 42%, #EEF2F6 100%);
+      letter-spacing: 0;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--soft);
+      box-shadow: 0 0 0 1px rgba(7, 42, 82, .06), 0 30px 80px rgba(7, 42, 82, .16);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .browser-bar {
+      background: #EDF1F6;
+      padding: max(10px, env(safe-area-inset-top)) 14px 8px;
+      border-bottom: 1px solid rgba(7, 42, 82, .08);
+    }
+
+    .url-pill {
+      min-height: 32px;
+      border-radius: 999px;
+      background: var(--white);
+      color: #4C586A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      box-shadow: inset 0 0 0 1px rgba(7, 42, 82, .08);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 72px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 20px rgba(7, 42, 82, .22);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+    }
+
+    .brand-text strong,
+    .brand-text span {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .brand-text strong {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .brand-text span {
+      color: rgba(255, 255, 255, .72);
+      font-size: 11px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .call-chip {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--gold);
+      color: #111827;
+      padding: 0 12px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, .12);
+      color: var(--white);
+    }
+
+    .container {
+      padding: 18px 16px calc(104px + env(safe-area-inset-bottom));
+    }
+
+    .progress-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .progress-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .progress-title strong {
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-items: center;
+      position: relative;
+      min-height: 34px;
+    }
+
+    .stepper::before {
+      content: "";
+      height: 4px;
+      background: #DDE4EE;
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 15px;
+      border-radius: 999px;
+    }
+
+    .stepper-fill {
+      height: 4px;
+      background: var(--blue);
+      position: absolute;
+      left: 10%;
+      top: 15px;
+      border-radius: 999px;
+      width: 0;
+      transition: width .25s ease;
+    }
+
+    .step-dot {
+      position: relative;
+      z-index: 1;
+      width: 34px;
+      height: 34px;
+      margin: 0 auto;
+      border-radius: 50%;
+      border: 3px solid #DDE4EE;
+      background: var(--white);
+      color: #7D8898;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+
+    .step-dot.done,
+    .step-dot.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .page-title {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-size: 30px;
+      line-height: 1.18;
+      font-weight: 900;
+    }
+
+    .lead {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+
+    .start-hero {
+      min-height: 210px;
+      border-radius: 26px;
+      margin-bottom: 16px;
+      padding: 22px 18px;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, .96), rgba(234, 242, 254, .88)),
+        linear-gradient(90deg, rgba(7, 42, 82, .06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(7, 42, 82, .06) 1px, transparent 1px);
+      background-size: auto, 36px 36px, 36px 36px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .start-hero::before,
+    .start-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(47, 128, 237, .10);
+    }
+
+    .start-hero::before {
+      width: 132px;
+      height: 132px;
+      left: -44px;
+      bottom: -40px;
+    }
+
+    .start-hero::after {
+      width: 96px;
+      height: 96px;
+      right: -26px;
+      top: -18px;
+    }
+
+    .start-pin {
+      width: 92px;
+      height: 112px;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      margin-bottom: 8px;
+    }
+
+    .start-pin::before {
+      content: "";
+      width: 76px;
+      height: 76px;
+      border-radius: 50% 50% 50% 10px;
+      rotate: -45deg;
+      background: var(--gold);
+      box-shadow: 0 16px 26px rgba(244, 180, 0, .28);
+    }
+
+    .start-pin svg {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      z-index: 2;
+      color: var(--navy);
+      stroke-width: 2.5;
+    }
+
+    .pin-check {
+      position: absolute;
+      right: 2px;
+      top: 18px;
+      z-index: 3;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--blue);
+      color: var(--white);
+      box-shadow: 0 8px 18px rgba(47, 128, 237, .26);
+    }
+
+    .pin-check svg {
+      width: 16px;
+      height: 16px;
+      position: static;
+      color: currentColor;
+    }
+
+    .start-option {
+      border: 1px solid rgba(216, 222, 232, .86);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .start-option.is-hidden {
+      display: none;
+    }
+
+    .start-option-header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .start-option-header h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 20px;
+      line-height: 1.28;
+    }
+
+    .start-option p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .status-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .status-item {
+      min-height: 54px;
+      border-radius: 16px;
+      background: #F6F8FB;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    .status-item span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .card-heading h2 {
+      margin: 0;
+      font-size: 19px;
+      color: var(--navy);
+      line-height: 1.35;
+    }
+
+    .icon-badge {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      border-radius: 14px;
+      background: #EAF2FE;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #344054;
+      font-weight: 700;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #FBFCFE;
+      color: var(--ink);
+      border-radius: 16px;
+      min-height: 54px;
+      padding: 14px;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(47, 128, 237, .14);
+    }
+
+    .upload-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .upload-zone {
+      min-height: 124px;
+      border: 1.5px dashed #B8C4D6;
+      border-radius: 18px;
+      background: #FBFCFE;
+      padding: 16px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--navy);
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .upload-zone:hover {
+      border-color: var(--blue);
+      background: #F4F8FF;
+      box-shadow: 0 10px 20px rgba(7, 42, 82, .07);
+    }
+
+    .upload-zone strong,
+    .upload-zone span {
+      display: block;
+    }
+
+    .upload-zone strong {
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .upload-zone span {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .media-preview {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .media-preview:empty {
+      display: none;
+    }
+
+    .media-item {
+      min-height: 64px;
+      border: 1px solid #E7ECF3;
+      border-radius: 16px;
+      background: var(--white);
+      padding: 8px 10px 8px 8px;
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .media-thumb {
+      width: 54px;
+      height: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #EAF2FE;
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+    }
+
+    .media-thumb img,
+    .media-thumb video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .media-meta strong,
+    .media-meta span {
+      display: block;
+    }
+
+    .media-meta strong {
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 220px;
+    }
+
+    .media-meta span {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .remove-media {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 12px;
+      background: #F2F4F7;
+      color: #475467;
+      display: grid;
+      place-items: center;
+    }
+
+    .map-preview {
+      min-height: 174px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background:
+        linear-gradient(32deg, transparent 0 33%, rgba(244, 180, 0, .32) 33% 38%, transparent 38%),
+        linear-gradient(126deg, transparent 0 44%, rgba(47, 128, 237, .22) 44% 49%, transparent 49%),
+        linear-gradient(90deg, rgba(7, 42, 82, .08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(7, 42, 82, .08) 1px, transparent 1px),
+        #E9F2F4;
+      background-size: auto, auto, 34px 34px, 34px 34px, auto;
+      margin-top: 8px;
+    }
+
+    .map-pin {
+      position: absolute;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 50% 50% 50% 6px;
+      rotate: -45deg;
+      background: var(--red);
+      box-shadow: 0 8px 20px rgba(235, 87, 87, .32);
+    }
+
+    .map-pin::after {
+      content: "";
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--white);
+      position: absolute;
+      left: 14px;
+      top: 14px;
+    }
+
+    .map-label {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      background: rgba(255, 255, 255, .93);
+      border-radius: 15px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 8px 20px rgba(7, 42, 82, .12);
+    }
+
+    .map-label strong {
+      display: block;
+      color: var(--navy);
+      font-size: 15px;
+    }
+
+    .map-label span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .type-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .choice {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #FBFCFE;
+      min-height: 112px;
+      padding: 14px;
+      text-align: left;
+      display: grid;
+      align-content: space-between;
+      gap: 10px;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .choice:hover {
+      border-color: rgba(47, 128, 237, .45);
+      box-shadow: 0 10px 20px rgba(7, 42, 82, .08);
+    }
+
+    .choice[aria-pressed="true"] {
+      border-color: var(--gold);
+      background: #FFF8E1;
+      box-shadow: 0 0 0 4px rgba(244, 180, 0, .18);
+    }
+
+    .choice strong {
+      font-size: 16px;
+      color: var(--navy);
+    }
+
+    .choice span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #EEF3F8;
+      padding: 6px;
+      border-radius: 18px;
+    }
+
+    .segment {
+      border: 0;
+      border-radius: 14px;
+      min-height: 46px;
+      background: transparent;
+      color: #4C586A;
+      font-weight: 800;
+    }
+
+    .segment[aria-pressed="true"] {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: 0 6px 16px rgba(7, 42, 82, .10);
+    }
+
+    .counter {
+      display: grid;
+      grid-template-columns: 56px 1fr 56px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .counter button {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--navy);
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .counter-value {
+      min-height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: #F3F7FB;
+      color: var(--navy);
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .callout {
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .callout.info {
+      background: #EAF2FE;
+      color: #174A87;
+    }
+
+    .callout.warn {
+      background: #FFF4CF;
+      color: #6E5000;
+    }
+
+    .callout.success {
+      background: #E9F8EF;
+      color: #17643A;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 0;
+      border-top: 1px solid #EDF0F5;
+    }
+
+    .summary-row:first-of-type {
+      border-top: 0;
+    }
+
+    .summary-row span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .summary-row strong {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .edit-button {
+      border: 1px solid var(--line);
+      background: var(--white);
+      color: var(--blue);
+      border-radius: 999px;
+      min-height: 38px;
+      padding: 0 12px;
+      font-weight: 800;
+    }
+
+    .success-visual {
+      width: 128px;
+      height: 128px;
+      border-radius: 50%;
+      margin: 8px auto 18px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 35% 30%, #DFF8E9, #C6F0D8 55%, #A9E7C4);
+      color: var(--green);
+      box-shadow: 0 18px 36px rgba(39, 174, 96, .22);
+    }
+
+    .reference {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .reference strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--navy);
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+
+    .actions {
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(247, 248, 250, 0), var(--soft) 20%);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .action-grid.two {
+      grid-template-columns: .72fr 1.28fr;
+    }
+
+    .btn {
+      min-height: 60px;
+      border-radius: var(--radius-button);
+      border: 0;
+      padding: 0 18px;
+      font-weight: 900;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      text-align: center;
+      line-height: 1.35;
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+    }
+
+    .btn:active {
+      transform: scale(.98);
+    }
+
+    .btn.primary {
+      background: var(--gold);
+      color: #111827;
+      box-shadow: 0 12px 24px rgba(244, 180, 0, .25);
+    }
+
+    .btn.primary:hover {
+      background: var(--gold-dark);
+      box-shadow: 0 16px 28px rgba(244, 180, 0, .30);
+    }
+
+    .btn.secondary {
+      background: var(--white);
+      color: var(--navy);
+      border: 1px solid var(--line);
+    }
+
+    .btn.blue {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .footer-note {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      color: #798395;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .drawer-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(7, 42, 82, .42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .drawer {
+      width: min(330px, 86vw);
+      min-height: 100%;
+      margin-left: auto;
+      background: var(--white);
+      padding: max(18px, env(safe-area-inset-top)) 18px 18px;
+      transform: translateX(100%);
+      transition: transform .24s ease;
+      box-shadow: -22px 0 44px rgba(7, 42, 82, .22);
+    }
+
+    .drawer-scrim.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-scrim.open .drawer {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .drawer-head strong {
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .drawer-nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .drawer-nav a {
+      min-height: 52px;
+      border-radius: 16px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+      background: #F6F8FB;
+      font-weight: 800;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn .22s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    @media (min-width: 720px) {
+      body {
+        padding: 28px 0;
+      }
+
+      .app-shell {
+        min-height: calc(100vh - 56px);
+        border-radius: 30px;
+        overflow: hidden;
+      }
+
+      .topbar {
+        top: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="DOH LIFE TAG emergency report app">
+    <div class="browser-bar" aria-hidden="true">
+      <div class="url-pill">
+        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+        https://doh-lifetag.go.th/report
+      </div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand" aria-label="DOH LIFE TAG">
+        <div class="brand-mark">DOH</div>
+        <div class="brand-text">
+          <strong>DOH LIFE TAG</strong>
+          <span>ระบบแจ้งเหตุฉุกเฉิน</span>
+        </div>
+      </div>
+      <div class="top-actions">
+        <a class="call-chip" href="tel:1669" aria-label="โทร 1669">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.35 1.9.65 2.81a2 2 0 0 1-.45 2.11L8.04 9.91a16 16 0 0 0 6.05 6.05l1.27-1.27a2 2 0 0 1 2.11-.45c.91.3 1.85.52 2.81.65A2 2 0 0 1 22 16.92z"></path></svg>
+          1669
+        </a>
+        <button class="icon-button" id="menuButton" aria-label="เปิดเมนู">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16"></path><path d="M4 12h16"></path><path d="M4 18h16"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="container">
+      <section class="screen active" id="startScreen">
+        <h1 class="page-title">เริ่มต้นการแจ้งเหตุ</h1>
+        <p class="lead">เลือกวิธีเริ่มต้นให้ตรงกับสถานการณ์ ระบบจะพาไปยังขั้นตอนที่เหมาะสมทันที</p>
+
+        <div class="start-hero" aria-hidden="true">
+          <div class="start-pin">
+            <svg viewBox="0 0 24 24"><path d="M16 11c0 2.5-4 6-4 6s-4-3.5-4-6a4 4 0 0 1 8 0z"></path><circle cx="12" cy="11" r="1.4"></circle></svg>
+            <div class="pin-check">
+              <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+            </div>
+          </div>
+          <strong style="color:#072A52;font-size:18px">DOH LIFE TAG พร้อมรับแจ้งเหตุ</strong>
+        </div>
+
+        <article class="start-option" id="existingReportOption">
+          <div class="start-option-header">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M17 20h5v-2a4 4 0 0 0-4-4h-1"></path><path d="M9 20H2v-2a4 4 0 0 1 4-4h3"></path><circle cx="9" cy="7" r="4"></circle><path d="M17 8l2 2 4-4"></path></svg></div>
+            <h2>มีคนแจ้งเหตุแล้ว</h2>
+          </div>
+          <p>ใช้กรณีเห็นว่ามีรายงานเหตุแล้ว และต้องการอัปเดตสถานการณ์หรือเพิ่มข้อมูลเพิ่มเติมให้เจ้าหน้าที่</p>
+          <button class="btn blue" id="existingReportButton" style="width:100%">
+            อัปเดตสถานการณ์เพิ่มเติม
+          </button>
+        </article>
+
+        <article class="start-option" id="firstReportOption">
+          <div class="start-option-header">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M12 3v18"></path><path d="M3 12h18"></path><circle cx="12" cy="12" r="9"></circle></svg></div>
+            <h2>คุณเป็นคนแรกที่แจ้งเหตุ</h2>
+          </div>
+          <p>เริ่มแจ้งเหตุใหม่แบบ 5 ขั้นตอน พร้อมตำแหน่ง ประเภทเหตุ รายละเอียด ผู้บาดเจ็บ และยืนยันก่อนส่ง</p>
+          <a class="btn primary" href="tel:1669" style="width:100%;margin-bottom:10px">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.35 1.9.65 2.81a2 2 0 0 1-.45 2.11L8.04 9.91a16 16 0 0 0 6.05 6.05l1.27-1.27a2 2 0 0 1 2.11-.45c.91.3 1.85.52 2.81.65A2 2 0 0 1 22 16.92z"></path></svg>
+            โทรแจ้ง 1669
+          </a>
+          <button class="btn secondary" id="startWizardButton" style="width:100%">
+            ดำเนินการต่อเพื่อบันทึกจุดเกิดเหตุเอง
+          </button>
+        </article>
+      </section>
+
+      <section class="screen" id="existingReportScreen">
+        <h1 class="page-title">อัปเดตเหตุที่มีคนแจ้งแล้ว</h1>
+        <p class="lead">ข้อมูลเพิ่มเติมของคุณช่วยให้เจ้าหน้าที่เห็นภาพล่าสุดโดยไม่ต้องเริ่มรายงานใหม่ทั้งหมด</p>
+
+        <div class="callout success">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+          <span>พบรายงานใกล้ตำแหน่งของคุณแล้ว: LRS 11-145A เจ้าหน้าที่กำลังประสานความช่วยเหลือ</span>
+        </div>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg></div>
+            <h2>เพิ่มข้อมูลสถานการณ์</h2>
+          </div>
+          <div class="status-list">
+            <div class="status-item">
+              <svg viewBox="0 0 24 24"><path d="M12 20v-6"></path><path d="M6 20V10"></path><path d="M18 20V4"></path></svg>
+              สถานะล่าสุด <span>รถเริ่มชะลอตัว มีเจ้าหน้าที่ระหว่างเดินทาง</span>
+            </div>
+            <div class="status-item">
+              <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+              ข้อมูลจะถูกแนบกับรายงานเดิม <span>ไม่สร้างเหตุซ้ำ</span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="statusUpdate">รายละเอียดเพิ่มเติม</label>
+            <textarea id="statusUpdate">มีผู้ช่วยกันตั้งกรวยเตือนแล้ว รถยังผ่านได้ 1 ช่องทาง</textarea>
+          </div>
+          <div class="field">
+            <label for="existingMediaInput">แนบรูปหรือวิดีโอเพิ่มเติม</label>
+            <input class="upload-input media-input" id="existingMediaInput" type="file" accept="image/*,video/*" multiple>
+            <label class="upload-zone" for="existingMediaInput">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+              <strong>อัปโหลดรูปหรือวิดีโอ</strong>
+              <span>รองรับหลายไฟล์ เพื่อช่วยยืนยันสถานการณ์ล่าสุด</span>
+            </label>
+            <div class="media-preview" data-media-preview></div>
+          </div>
+        </article>
+
+        <button class="btn blue" id="sendUpdateButton" style="width:100%;margin-bottom:10px">ส่งข้อมูลเพิ่มเติม</button>
+        <button class="btn secondary" id="backToStartFromExisting" style="width:100%">ย้อนกลับ</button>
+      </section>
+
+      <div class="progress-card" id="progressCard" aria-label="สถานะขั้นตอน">
+        <div class="progress-title">
+          <strong id="progressLabel">ขั้นตอนที่ 1 จาก 5</strong>
+          <span id="progressName">ตำแหน่งและประเภทเหตุ</span>
+        </div>
+        <div class="stepper" aria-hidden="true">
+          <div class="stepper-fill" id="stepperFill"></div>
+          <div class="step-dot">1</div>
+          <div class="step-dot">2</div>
+          <div class="step-dot">3</div>
+          <div class="step-dot">4</div>
+          <div class="step-dot">5</div>
+        </div>
+      </div>
+
+      <section class="screen wizard-screen" data-screen="0">
+        <h1 class="page-title">แจ้งเหตุฉุกเฉิน</h1>
+        <p class="lead">ยืนยันตำแหน่งและเลือกประเภทเหตุ ระบบจะนำทางทีละขั้นเพื่อส่งข้อมูลให้เจ้าหน้าที่เร็วที่สุด</p>
+
+        <div class="callout info">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+          <span>ตำแหน่งถูกประมาณจากอุปกรณ์ของคุณ สามารถแก้ไข LRS หรือรายละเอียดจุดเกิดเหตุได้</span>
+        </div>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
+            <h2>ตำแหน่งเกิดเหตุ</h2>
+          </div>
+          <div class="map-preview" role="img" aria-label="แผนที่จำลองตำแหน่ง LRS 11-145A">
+            <div class="map-pin"></div>
+            <div class="map-label">
+              <div>
+                <strong id="mapLrs">LRS 11-145A</strong>
+                <span>ถนนมิตรภาพ กม. 145 ฝั่งขาเข้า</span>
+              </div>
+              <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"></path></svg>
+            </div>
+          </div>
+          <div class="field">
+            <label for="lrsInput">รหัสตำแหน่ง LRS</label>
+            <input id="lrsInput" value="LRS 11-145A" autocomplete="off">
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div>
+            <h2>ประเภทเหตุการณ์</h2>
+          </div>
+          <div class="type-grid" id="typeGrid">
+            <button class="choice" aria-pressed="true" data-value="อุบัติเหตุ">
+              <svg viewBox="0 0 24 24"><path d="M5 17h14"></path><path d="M7 17l1-5h8l1 5"></path><circle cx="8" cy="17" r="2"></circle><circle cx="16" cy="17" r="2"></circle><path d="M10 7h4"></path></svg>
+              <strong>อุบัติเหตุ</strong>
+              <span>รถชน รถล้ม สิ่งกีดขวาง</span>
+            </button>
+            <button class="choice" aria-pressed="false" data-value="ไฟไหม้">
+              <svg viewBox="0 0 24 24"><path d="M8.5 14.5A4.5 4.5 0 0 0 17 12c0-4-4-6-4-10-3 2-6 5-6 9a5 5 0 0 0 5 5"></path><path d="M12 22a4 4 0 0 0 4-4c0-2-2-3.5-2-5-2 1.5-4 3-4 5a4 4 0 0 0 2 4z"></path></svg>
+              <strong>ไฟไหม้</strong>
+              <span>รถไหม้ อาคารไหม้ ควันหนา</span>
+            </button>
+            <button class="choice" aria-pressed="false" data-value="เจ็บป่วย">
+              <svg viewBox="0 0 24 24"><path d="M12 2v20"></path><path d="M2 12h20"></path><path d="M7 7h10v10H7z"></path></svg>
+              <strong>เจ็บป่วย</strong>
+              <span>หมดสติ หายใจลำบาก</span>
+            </button>
+            <button class="choice" aria-pressed="false" data-value="อาชญากรรม">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <strong>อาชญากรรม</strong>
+              <span>เหตุรุนแรง ต้องการเจ้าหน้าที่</span>
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen wizard-screen" data-screen="1">
+        <h1 class="page-title">รายละเอียดเหตุการณ์</h1>
+        <p class="lead">เพิ่มข้อมูลสั้น ๆ ที่ช่วยให้ทีมช่วยเหลือประเมินสถานการณ์และเตรียมอุปกรณ์ได้ถูกต้อง</p>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg></div>
+            <h2>ข้อมูลเหตุ</h2>
+          </div>
+          <div class="field">
+            <label for="detailInput">รายละเอียดที่เห็น</label>
+            <textarea id="detailInput">รถกระบะชนท้ายรถจักรยานยนต์ มีผู้บาดเจ็บอยู่ริมทาง</textarea>
+          </div>
+          <div class="field">
+            <label for="timeInput">เวลาเกิดเหตุโดยประมาณ</label>
+            <input id="timeInput" type="time" value="14:25">
+          </div>
+          <div class="field">
+            <label for="mediaInput">แนบรูปหรือวิดีโอ</label>
+            <input class="upload-input media-input" id="mediaInput" type="file" accept="image/*,video/*" multiple>
+            <label class="upload-zone" for="mediaInput">
+              <svg viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+              <strong>เพิ่มหลักฐานจากที่เกิดเหตุ</strong>
+              <span>เลือกรูปภาพหรือวิดีโอจากอุปกรณ์ของคุณ</span>
+            </label>
+            <div class="media-preview" data-media-preview></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M3 12h18"></path><path d="M7 8l-4 4 4 4"></path><path d="M17 8l4 4-4 4"></path></svg></div>
+            <h2>สภาพการจราจร</h2>
+          </div>
+          <div class="segmented" id="trafficGroup" role="group" aria-label="สภาพการจราจร">
+            <button class="segment" aria-pressed="false" data-value="คล่องตัว">คล่องตัว</button>
+            <button class="segment" aria-pressed="true" data-value="ชะลอตัว">ชะลอตัว</button>
+            <button class="segment" aria-pressed="false" data-value="ติดขัด">ติดขัด</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen wizard-screen" data-screen="2">
+        <h1 class="page-title">ผู้บาดเจ็บ</h1>
+        <p class="lead">ระบุจำนวนและความรุนแรงเท่าที่ทราบ หากไม่แน่ใจให้เลือกใกล้เคียงที่สุด</p>
+
+        <div class="callout warn">
+          <svg viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+          <span>ถ้ามีผู้หมดสติหรือเลือดออกมาก สามารถโทร 1669 ได้ทันทีระหว่างส่งรายงาน</span>
+        </div>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+            <h2>จำนวนผู้บาดเจ็บ</h2>
+          </div>
+          <div class="counter">
+            <button id="decreaseInjury" aria-label="ลดจำนวน">−</button>
+            <div class="counter-value" id="injuryCount">1</div>
+            <button id="increaseInjury" aria-label="เพิ่มจำนวน">+</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+            <h2>ระดับความรุนแรง</h2>
+          </div>
+          <div class="segmented" id="severityGroup" role="group" aria-label="ระดับความรุนแรง">
+            <button class="segment" aria-pressed="false" data-value="เล็กน้อย">เล็กน้อย</button>
+            <button class="segment" aria-pressed="true" data-value="ปานกลาง">ปานกลาง</button>
+            <button class="segment" aria-pressed="false" data-value="สาหัส">สาหัส</button>
+          </div>
+          <div class="field">
+            <label for="injuryNote">ข้อมูลเพิ่มเติม</label>
+            <textarea id="injuryNote">ผู้บาดเจ็บมีแผลถลอกและปวดขา ยังรู้สึกตัว</textarea>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen wizard-screen" data-screen="3">
+        <h1 class="page-title">ยืนยันข้อมูลก่อนส่ง</h1>
+        <p class="lead">ตรวจสอบข้อมูลอีกครั้ง หากต้องแก้ไขสามารถกลับไปยังหัวข้อนั้นได้ทันที</p>
+
+        <article class="card" id="summaryCard">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
+            <h2>สรุปรายงาน</h2>
+          </div>
+          <div class="summary-row">
+            <div><span>ตำแหน่ง</span><strong id="sumLocation">LRS 11-145A</strong></div>
+            <button class="edit-button" data-go="0">แก้ไข</button>
+          </div>
+          <div class="summary-row">
+            <div><span>ประเภทเหตุ</span><strong id="sumType">อุบัติเหตุ</strong></div>
+            <button class="edit-button" data-go="0">แก้ไข</button>
+          </div>
+          <div class="summary-row">
+            <div><span>รายละเอียด</span><strong id="sumDetail">รถกระบะชนท้ายรถจักรยานยนต์</strong></div>
+            <button class="edit-button" data-go="1">แก้ไข</button>
+          </div>
+          <div class="summary-row">
+            <div><span>รูป/วิดีโอแนบ</span><strong id="sumMedia">ยังไม่มีไฟล์แนบ</strong></div>
+            <button class="edit-button" data-go="1">แก้ไข</button>
+          </div>
+          <div class="summary-row">
+            <div><span>ผู้บาดเจ็บ</span><strong id="sumInjury">1 คน ปานกลาง</strong></div>
+            <button class="edit-button" data-go="2">แก้ไข</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen wizard-screen" data-screen="4">
+        <div class="success-visual" aria-hidden="true">
+          <svg viewBox="0 0 24 24" style="width:64px;height:64px;stroke-width:2.6"><path d="M20 6 9 17l-5-5"></path></svg>
+        </div>
+        <h1 class="page-title" style="text-align:center">ส่งรายงานเรียบร้อยแล้ว</h1>
+        <p class="lead" style="text-align:center">เจ้าหน้าที่ได้รับข้อมูลและกำลังประสานทีมช่วยเหลือ กรุณาอยู่ในพื้นที่ปลอดภัย</p>
+
+        <div class="callout success">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg>
+          <span>มีคนแจ้งเหตุแล้ว ระบบจะใช้หมายเลขอ้างอิงนี้สำหรับติดตามสถานะ</span>
+        </div>
+
+        <article class="card">
+          <div class="reference">
+            หมายเลขอ้างอิง
+            <strong>DLT-260625-145A</strong>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-heading">
+            <div class="icon-badge"><svg viewBox="0 0 24 24"><path d="M3 12h18"></path><path d="M12 3v18"></path></svg></div>
+            <h2>ดำเนินการต่อ</h2>
+          </div>
+          <div class="type-grid">
+            <a class="btn secondary" href="tel:1669">โทร 1669</a>
+            <button class="btn secondary" id="newReport">แจ้งเหตุใหม่</button>
+          </div>
+        </article>
+      </section>
+    </section>
+
+    <div class="actions" id="actionBar">
+      <div class="action-grid" id="actionGrid">
+        <button class="btn primary" id="nextButton">
+          <span>ถัดไป</span>
+          <svg viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+        </button>
+      </div>
+      <div class="footer-note">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+        ข้อมูลถูกเข้ารหัสและใช้เพื่อการช่วยเหลือฉุกเฉินเท่านั้น
+      </div>
+    </div>
+  </main>
+
+  <aside class="drawer-scrim" id="drawerScrim" aria-hidden="true">
+    <div class="drawer" role="dialog" aria-modal="true" aria-label="เมนู">
+      <div class="drawer-head">
+        <strong>เมนู</strong>
+        <button class="icon-button" id="closeDrawer" aria-label="ปิดเมนู" style="background:#EEF3F8;color:#072A52">
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+      </div>
+      <nav class="drawer-nav">
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"></path><path d="M5 10v11h14V10"></path></svg>หน้าแรก</a>
+        <a href="#"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"></path><path d="M7 14l3-3 4 4 5-7"></path></svg>ประวัติการแจ้งเหตุ</a>
+        <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>เกี่ยวกับระบบ</a>
+        <a href="tel:1669"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.11 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.35 1.9.65 2.81a2 2 0 0 1-.45 2.11L8.04 9.91a16 16 0 0 0 6.05 6.05l1.27-1.27a2 2 0 0 1 2.11-.45c.91.3 1.85.52 2.81.65A2 2 0 0 1 22 16.92z"></path></svg>ติดต่อ 1669</a>
+      </nav>
+    </div>
+  </aside>
+
+  <script>
+    const stepNames = [
+      "ตำแหน่งและประเภทเหตุ",
+      "รายละเอียดเหตุการณ์",
+      "ผู้บาดเจ็บ",
+      "ยืนยันข้อมูล",
+      "สำเร็จ"
+    ];
+
+    const state = {
+      step: 0,
+      type: "อุบัติเหตุ",
+      traffic: "ชะลอตัว",
+      severity: "ปานกลาง",
+      injuries: 1,
+      mediaFiles: []
+    };
+
+    const screens = [...document.querySelectorAll(".screen")];
+    const wizardScreens = [...document.querySelectorAll(".wizard-screen")];
+    const dots = [...document.querySelectorAll(".step-dot")];
+    const startScreen = document.getElementById("startScreen");
+    const existingReportScreen = document.getElementById("existingReportScreen");
+    const existingReportOption = document.getElementById("existingReportOption");
+    const firstReportOption = document.getElementById("firstReportOption");
+    const progressCard = document.getElementById("progressCard");
+    const actionBar = document.getElementById("actionBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressName = document.getElementById("progressName");
+    const stepperFill = document.getElementById("stepperFill");
+    const actionGrid = document.getElementById("actionGrid");
+
+    function selectedValue(group) {
+      const selected = group.querySelector('[aria-pressed="true"]');
+      return selected ? selected.dataset.value : "";
+    }
+
+    function showStart() {
+      screens.forEach((screen) => screen.classList.remove("active"));
+      const showExisting = Math.random() < 0.5;
+      existingReportOption.classList.toggle("is-hidden", !showExisting);
+      firstReportOption.classList.toggle("is-hidden", showExisting);
+      startScreen.classList.add("active");
+      progressCard.style.display = "none";
+      actionBar.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showExistingReport() {
+      screens.forEach((screen) => screen.classList.remove("active"));
+      existingReportScreen.classList.add("active");
+      progressCard.style.display = "none";
+      actionBar.style.display = "none";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function mediaSummary() {
+      const imageCount = state.mediaFiles.filter((file) => file.type.startsWith("image/")).length;
+      const videoCount = state.mediaFiles.filter((file) => file.type.startsWith("video/")).length;
+      const parts = [];
+      if (imageCount) parts.push(`รูปภาพ ${imageCount} ไฟล์`);
+      if (videoCount) parts.push(`วิดีโอ ${videoCount} ไฟล์`);
+      return parts.length ? parts.join(" • ") : "ยังไม่มีไฟล์แนบ";
+    }
+
+    function renderMediaPreviews() {
+      document.querySelectorAll("[data-media-preview]").forEach((preview) => {
+        preview.innerHTML = "";
+        state.mediaFiles.forEach((file, index) => {
+          const item = document.createElement("div");
+          item.className = "media-item";
+
+          const thumb = document.createElement("div");
+          thumb.className = "media-thumb";
+          const url = URL.createObjectURL(file);
+
+          if (file.type.startsWith("image/")) {
+            const image = document.createElement("img");
+            image.src = url;
+            image.alt = file.name;
+            image.onload = () => URL.revokeObjectURL(url);
+            thumb.appendChild(image);
+          } else if (file.type.startsWith("video/")) {
+            const video = document.createElement("video");
+            video.src = url;
+            video.muted = true;
+            video.playsInline = true;
+            video.onloadeddata = () => URL.revokeObjectURL(url);
+            thumb.appendChild(video);
+          } else {
+            thumb.innerHTML = '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>';
+          }
+
+          const meta = document.createElement("div");
+          meta.className = "media-meta";
+          const name = document.createElement("strong");
+          name.textContent = file.name;
+          const details = document.createElement("span");
+          details.textContent = `${file.type.startsWith("video/") ? "วิดีโอ" : "รูปภาพ"} • ${formatFileSize(file.size)}`;
+          meta.append(name, details);
+
+          const remove = document.createElement("button");
+          remove.className = "remove-media";
+          remove.type = "button";
+          remove.setAttribute("aria-label", `ลบไฟล์ ${file.name}`);
+          remove.innerHTML = '<svg viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>';
+          remove.addEventListener("click", () => {
+            state.mediaFiles.splice(index, 1);
+            renderMediaPreviews();
+            updateSummary();
+          });
+
+          item.append(thumb, meta, remove);
+          preview.appendChild(item);
+        });
+      });
+    }
+
+    function addMediaFiles(files) {
+      const acceptedFiles = [...files].filter((file) => file.type.startsWith("image/") || file.type.startsWith("video/"));
+      state.mediaFiles.push(...acceptedFiles);
+      renderMediaPreviews();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const lrs = document.getElementById("lrsInput").value || "ไม่ระบุ";
+      const detail = document.getElementById("detailInput").value || "ไม่ระบุ";
+      const time = document.getElementById("timeInput").value || "ไม่ระบุ";
+      const note = document.getElementById("injuryNote").value || "ไม่ระบุ";
+
+      document.getElementById("mapLrs").textContent = lrs;
+      document.getElementById("sumLocation").textContent = lrs;
+      document.getElementById("sumType").textContent = state.type;
+      document.getElementById("sumDetail").textContent = `${detail} • ${time} • จราจร${state.traffic}`;
+      document.getElementById("sumMedia").textContent = mediaSummary();
+      document.getElementById("sumInjury").textContent = `${state.injuries} คน • ${state.severity} • ${note}`;
+    }
+
+    function renderActions() {
+      if (state.step === 4) {
+        actionBar.style.display = "none";
+        return;
+      }
+
+      actionBar.style.display = "block";
+      actionGrid.className = state.step > 0 ? "action-grid two" : "action-grid";
+      actionGrid.innerHTML = "";
+
+      if (state.step > 0) {
+        const back = document.createElement("button");
+        back.className = "btn secondary";
+        back.textContent = "ย้อนกลับ";
+        back.addEventListener("click", () => setStep(state.step - 1));
+        actionGrid.appendChild(back);
+      }
+
+      const next = document.createElement("button");
+      next.className = state.step === 3 ? "btn blue" : "btn primary";
+      next.innerHTML = state.step === 3
+        ? '<span>ยืนยันและส่งรายงาน</span>'
+        : '<span>ถัดไป</span><svg viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>';
+      next.addEventListener("click", () => setStep(Math.min(4, state.step + 1)));
+      actionGrid.appendChild(next);
+    }
+
+    function setStep(nextStep) {
+      state.step = nextStep;
+      updateSummary();
+      progressCard.style.display = "block";
+
+      screens.forEach((screen, index) => {
+        screen.classList.remove("active");
+      });
+
+      wizardScreens.forEach((screen, index) => {
+        screen.classList.toggle("active", index === state.step);
+      });
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("done", index < state.step);
+        dot.classList.toggle("active", index === state.step);
+      });
+
+      progressLabel.textContent = `ขั้นตอนที่ ${state.step + 1} จาก 5`;
+      progressName.textContent = stepNames[state.step];
+      stepperFill.style.width = `${state.step * 20}%`;
+      renderActions();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function bindChoiceGroup(selector, onChange) {
+      document.querySelector(selector).addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-value]");
+        if (!button) return;
+        [...button.parentElement.querySelectorAll("button[data-value]")].forEach((item) => {
+          item.setAttribute("aria-pressed", String(item === button));
+        });
+        onChange(button.dataset.value);
+        updateSummary();
+      });
+    }
+
+    bindChoiceGroup("#typeGrid", value => state.type = value);
+    bindChoiceGroup("#trafficGroup", value => state.traffic = value);
+    bindChoiceGroup("#severityGroup", value => state.severity = value);
+
+    document.getElementById("lrsInput").addEventListener("input", updateSummary);
+    document.getElementById("detailInput").addEventListener("input", updateSummary);
+    document.getElementById("timeInput").addEventListener("input", updateSummary);
+    document.getElementById("injuryNote").addEventListener("input", updateSummary);
+    document.querySelectorAll(".media-input").forEach((input) => {
+      input.addEventListener("change", (event) => {
+        addMediaFiles(event.target.files);
+        event.target.value = "";
+      });
+    });
+
+    document.getElementById("increaseInjury").addEventListener("click", () => {
+      state.injuries = Math.min(20, state.injuries + 1);
+      document.getElementById("injuryCount").textContent = state.injuries;
+      updateSummary();
+    });
+
+    document.getElementById("decreaseInjury").addEventListener("click", () => {
+      state.injuries = Math.max(0, state.injuries - 1);
+      document.getElementById("injuryCount").textContent = state.injuries;
+      updateSummary();
+    });
+
+    document.querySelectorAll(".edit-button").forEach((button) => {
+      button.addEventListener("click", () => setStep(Number(button.dataset.go)));
+    });
+
+    document.getElementById("startWizardButton").addEventListener("click", () => setStep(0));
+    document.getElementById("existingReportButton").addEventListener("click", showExistingReport);
+    document.getElementById("backToStartFromExisting").addEventListener("click", showStart);
+    document.getElementById("sendUpdateButton").addEventListener("click", () => setStep(0));
+    document.getElementById("newReport").addEventListener("click", showStart);
+
+    const drawerScrim = document.getElementById("drawerScrim");
+    document.getElementById("menuButton").addEventListener("click", () => {
+      drawerScrim.classList.add("open");
+      drawerScrim.setAttribute("aria-hidden", "false");
+    });
+    document.getElementById("closeDrawer").addEventListener("click", closeDrawer);
+    drawerScrim.addEventListener("click", (event) => {
+      if (event.target === drawerScrim) closeDrawer();
+    });
+
+    function closeDrawer() {
+      drawerScrim.classList.remove("open");
+      drawerScrim.setAttribute("aria-hidden", "true");
+    }
+
+    showStart();
+
+    if ("serviceWorker" in navigator && ["http:", "https:"].includes(location.protocol)) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+  </script>
+</body>
+</html>

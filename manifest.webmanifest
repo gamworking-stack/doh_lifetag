@@ -1,0 +1,19 @@
+{
+  "name": "DOH LIFE TAG Emergency Report",
+  "short_name": "DOH LIFE TAG",
+  "description": "Mobile-first emergency incident report flow for DOH LIFE TAG.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7F8FA",
+  "theme_color": "#072A52",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
